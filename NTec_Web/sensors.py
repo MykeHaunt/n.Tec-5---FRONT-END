@@ -9,18 +9,12 @@ except ImportError:
     can = None
 
 def read_sensors():
-    """
-    Reads sensor data from a CAN interface if available,
-    otherwise returns simulated sensor data.
-    """
     sensor_data = {}
     if can:
         try:
-            # Example: setup a CAN bus interface.
             bus = can.interface.Bus(channel='can0', bustype='socketcan')
             message = bus.recv(timeout=1.0)
             if message:
-                # Parse message data as needed.
                 sensor_data = {
                     "steering_angle": float(message.data[0]) / 255,
                     "throttle_position": float(message.data[1]) / 255,
@@ -39,9 +33,6 @@ def read_sensors():
     return sensor_data
 
 def _simulate_sensor_data():
-    """
-    Returns simulated sensor data.
-    """
     return {
         "steering_angle": round(random.uniform(-1, 1), 2),
         "throttle_position": round(random.uniform(0, 1), 2),
