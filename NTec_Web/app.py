@@ -11,13 +11,11 @@ logger = logging.getLogger(__name__)
 
 BASE_MAP_FILE = "base_map.yaml"
 
-# Load calibration map from YAML.
 def load_base_map():
     if os.path.exists(BASE_MAP_FILE):
         with open(BASE_MAP_FILE, "r") as f:
             return yaml.safe_load(f)
     else:
-        # Initialize default values if file not found.
         base_map = {"fuel_map": 1.0, "boost_map": 1.0, "lambda_target": 1.0}
         with open(BASE_MAP_FILE, "w") as f:
             yaml.dump(base_map, f)
@@ -27,7 +25,6 @@ def save_base_map(base_map):
     with open(BASE_MAP_FILE, "w") as f:
         yaml.dump(base_map, f)
 
-# Global calibration map.
 base_map = load_base_map()
 
 @app.route("/")
@@ -36,15 +33,12 @@ def index():
 
 @app.route("/data", methods=["GET"])
 def data():
-    # Read sensor data (real or simulated).
     sensor_data = read_sensors()
-    # Also return current calibration map.
     return jsonify({"sensor_data": sensor_data, "base_map": base_map})
 
 @app.route("/update", methods=["POST"])
 def update():
     global base_map
-    # Get the command from the form submission.
     command = request.form.get("command")
     step = 0.01
     if command == "fuel_map_increase":
@@ -60,14 +54,10 @@ def update():
     elif command == "lambda_target_decrease":
         base_map["lambda_target"] -= step
     elif command == "simulate_detune":
-        # Example: detune boost_map due to part degradation.
         base_map["boost_map"] -= step
     elif command == "simulate_aero":
-        # Log aero simulation event (in a real system, trigger hardware control).
         logger.info("Simulated active aero control event triggered.")
     elif command == "ai_adjust":
-        # Use advanced AI decision-making to adjust parameters.
-        # For this example, we use sensor data from the request.
         sensor_vals = request.form.getlist("sensor_vals[]")
         try:
             sensor_vals = list(map(float, sensor_vals))
