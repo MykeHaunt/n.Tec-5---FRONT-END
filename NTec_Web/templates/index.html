@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NTec Interactive Tuning System</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>NTec Interactive Tuning System</h1>
+    <h2>Real-Time Sensor Data</h2>
+    <ul>
+        <li><strong>Steering Angle:</strong> <span id="steering">--</span></li>
+        <li><strong>Throttle Position:</strong> <span id="throttle">--</span></li>
+        <li><strong>Brake Pressure:</strong> <span id="brake">--</span></li>
+        <li><strong>Lambda Sensor:</strong> <span id="lambda">--</span></li>
+        <li><strong>Engine RPM:</strong> <span id="rpm">--</span></li>
+        <li><strong>Vehicle Speed:</strong> <span id="speed">--</span></li>
+    </ul>
+    <h2>Calibration Map</h2>
+    <ul>
+        <li><strong>Fuel Map:</strong> <span id="fuel_map">{{ base_map.fuel_map }}</span></li>
+        <li><strong>Boost Map:</strong> <span id="boost_map">{{ base_map.boost_map }}</span></li>
+        <li><strong>Lambda Target:</strong> <span id="lambda_target">{{ base_map.lambda_target }}</span></li>
+    </ul>
+    <h2>Adjust Parameters</h2>
+    <form method="POST" action="/update">
+        <div class="param">
+            <label>Fuel Map: </label>
+            <button class="button" type="submit" name="command" value="fuel_map_increase">Increase</button>
+            <button class="button" type="submit" name="command" value="fuel_map_decrease">Decrease</button>
+        </div>
+        <div class="param">
+            <label>Boost Map: </label>
+            <button class="button" type="submit" name="command" value="boost_map_increase">Increase</button>
+            <button class="button" type="submit" name="command" value="boost_map_decrease">Decrease</button>
+        </div>
+        <div class="param">
+            <label>Lambda Target: </label>
+            <button class="button" type="submit" name="command" value="lambda_target_increase">Increase</button>
+            <button class="button" type="submit" name="command" value="lambda_target_decrease">Decrease</button>
+        </div>
+        <div class="param">
+            <label>AI Adjustment: </label>
+            <!-- In a real system, sensor values could be passed for AI adjustment -->
+            <input type="hidden" name="sensor_vals[]" value="0.5">
+            <input type="hidden" name="sensor_vals[]" value="0.7">
+            <input type="hidden" name="sensor_vals[]" value="0.2">
+            <input type="hidden" name="sensor_vals[]" value="1.0">
+            <input type="hidden" name="sensor_vals[]" value="3000">
+            <input type="hidden" name="sensor_vals[]" value="100">
+            <button class="button" type="submit" name="command" value="ai_adjust">Run AI Adjustment</button>
+        </div>
+    </form>
+    <h2>Actions</h2>
+    <form method="POST" action="/update">
+        <button class="button" type="submit" name="command" value="simulate_detune">
+            Simulate Part Degradation (Detune)
+        </button>
+        <button class="button" type="submit" name="command" value="simulate_aero">
+            Simulate Active Aero Control
+        </button>
+    </form>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
