@@ -1,0 +1,4 @@
+Flask
+PyYAML
+tensorflow>=2.8
+python-can
