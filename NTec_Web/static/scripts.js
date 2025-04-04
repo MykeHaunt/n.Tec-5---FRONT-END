@@ -1,6 +1,3 @@
-// script.js
-
-// Function to periodically fetch sensor data and update the dashboard.
 function fetchData() {
     fetch('/data')
     .then(response => response.json())
@@ -18,5 +15,4 @@ function fetchData() {
     .catch(error => console.error("Error fetching sensor data:", error));
 }
 
-// Update sensor data every 2 seconds.
 setInterval(fetchData, 2000);
