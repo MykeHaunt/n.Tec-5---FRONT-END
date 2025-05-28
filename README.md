@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/2335d357-e65a-4496-8a60-58633ac015e4
 
 # n.Tec-5 Front-End: Technical Documentation
 
-This document provides a comprehensive, end‑to‑end technical specification and usage guide for the **n.Tec‑5 Front‑End** web application. It is structured to match the documentation style of the [2JZ‑GTE Predictive Monitoring System](https://github.com/MykeHaunt/2JZ-GTE-Predictive-Monitoring-System), with detailed information about architecture, build pipelines, deployment, and internal modules.
+This document provides a comprehensive, end‑to‑end technical specification and usage guide for the **n.Tec‑5 Front‑End** web application.
 
 ---
 
