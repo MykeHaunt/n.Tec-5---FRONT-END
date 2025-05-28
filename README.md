@@ -1,11 +1,3 @@
-![IMG_9863](https://github.com/user-attachments/assets/87c57f40-d9ba-4cc2-a4c4-e14010aea40b)
-![IMG_9865](https://github.com/user-attachments/assets/076afd73-ad54-4361-a130-eb2b64f005cf)
-![IMG_9852](https://github.com/user-attachments/assets/ee295b81-a82b-4ee5-89d5-ec698ce011ef)
-Here’s the corrected and complete README.md file with all content from the previous message properly enclosed in Markdown. This version is fully self-contained and properly formatted for GitHub rendering.
-
-⸻
-
-✅ You can copy-paste this entire content into a file named README.md in your project root.
 
 # n.Tec-5 Front-End: Technical Documentation
 
@@ -84,50 +76,59 @@ The system reads sensor values from a CAN interface, buffers the data, passes it
   unit: rev/min
   scale: 0.25
   offset: 0
+```
 
-	•	Sensor metadata and UI layout
-	•	Sampling configuration
-	•	Model normalization stats
+- Sensor metadata and UI layout  
+- Sampling configuration  
+- Model normalization stats  
 
-Static Assets & Templates
-	•	templates/index.html: Bootstrap + Jinja2
-	•	static/js/main.js: D3.js + EventSource
-	•	static/css/main.css: Custom layout
+### Static Assets & Templates
 
-⸻
+- `templates/index.html`: Bootstrap + Jinja2  
+- `static/js/main.js`: D3.js + EventSource  
+- `static/css/main.css`: Custom layout  
 
-Development Environment Setup
+---
 
-Versioned Dependencies
-	•	Flask 2.2+
-	•	python-can 4.2.2+
-	•	tensorflow 2.11+
-	•	cantools, PyYAML, gunicorn
+## Development Environment Setup
 
-Virtual Environments
+### Versioned Dependencies
 
+- Flask 2.2+  
+- python-can 4.2.2+  
+- tensorflow 2.11+  
+- cantools, PyYAML, gunicorn  
+
+### Virtual Environments
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
 
-Local CAN Bus Emulation
+### Local CAN Bus Emulation
 
+```bash
 sudo modprobe vcan
 sudo ip link add dev vcan0 type vcan
 sudo ip link set up vcan0
+```
 
+---
 
-⸻
+## Detailed Installation
 
-Detailed Installation
+### Initial Clone
 
-Initial Clone
-
+```bash
 git clone https://github.com/MykeHaunt/n.Tec-5---FRONT-END.git
 cd n.Tec-5---FRONT-END/NTec_Web
+```
 
-Directory Layout
+### Directory Layout
 
+```text
 ├── app.py
 ├── sensors.py
 ├── ai_model.py
@@ -135,28 +136,34 @@ Directory Layout
 ├── requirements.txt
 ├── static/
 └── templates/
+```
 
-Dependency Installation
+### Dependency Installation
 
+```bash
 pip install -r requirements.txt
+```
 
+---
 
-⸻
+## Build & Distribution
 
-Build & Distribution
+### PyInstaller
 
-PyInstaller
-	1.	Create app.spec with templates and static folders included in datas.
-	2.	Build with:
+1. Create `app.spec` with templates and static folders included in `datas`.  
+2. Build with:
 
+```bash
 pyinstaller --clean --onefile app.spec
+```
 
-	3.	Output binary at: dist/NTec5_FrontEnd.exe or dist/ntec5_frontend
+3. Output binary at: `dist/NTec5_FrontEnd.exe` or `dist/ntec5_frontend`
 
-Dockerization
+### Dockerization
 
-Dockerfile
+#### Dockerfile
 
+```dockerfile
 FROM python:3.10-slim
 RUN apt-get update && apt-get install -y can-utils
 WORKDIR /app
@@ -165,9 +172,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 EXPOSE 5000
 ENTRYPOINT ["python", "app.py"]
+```
 
-docker-compose.yml
+#### docker-compose.yml
 
+```yaml
 version: '3.8'
 services:
   frontend:
@@ -176,105 +185,121 @@ services:
     devices:
       - "/dev/vcan0:/dev/vcan0"
     privileged: true
+```
 
-GitHub Actions
+### GitHub Actions
 
 CI pipeline runs tests, packages the binary, and pushes artifacts or Docker images to GitHub Packages.
 
-⸻
+---
 
-Runtime Configuration
-	•	CAN_CHANNEL — Defaults to can0
-	•	CAN_BITRATE — Defaults to 500000
-	•	MODEL_PATH — Path to TensorFlow model
+## Runtime Configuration
 
-⸻
+- `CAN_CHANNEL` — Defaults to `can0`  
+- `CAN_BITRATE` — Defaults to `500000`  
+- `MODEL_PATH` — Path to TensorFlow model  
 
-Code Walkthrough
+---
 
-app.py
-	•	Initializes server
-	•	Defines /api/data, /api/predict, / routes
-	•	Injects base_map into Jinja templates
+## Code Walkthrough
 
-sensors.py
+### `app.py`
 
+- Initializes server  
+- Defines `/api/data`, `/api/predict`, `/` routes  
+- Injects `base_map` into Jinja templates  
+
+### `sensors.py`
+
+```python
 class CanSensor:
     def __init__(self, config):
         self.bus = can.interface.Bus(**config)
         self.buffer = deque(maxlen=config['buffer_size'])
+```
 
-	•	Background thread reads from bus
-	•	Catches errors and retries with backoff
+- Background thread reads from bus  
+- Catches errors and retries with backoff  
 
-ai_model.py
-	•	Loads model only on first call
-	•	Preprocesses data (normalization, windowing)
-	•	Returns dictionary of prediction scores
+### `ai_model.py`
 
-⸻
+- Loads model only on first call  
+- Preprocesses data (normalization, windowing)  
+- Returns dictionary of prediction scores  
 
-Error Handling & Logging
+---
 
-Logging
+## Error Handling & Logging
 
+### Logging
+
+```python
 import logging
 handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
+```
 
-Exceptions
-	•	SensorError
-	•	ModelError
-	•	ApiError
+### Exceptions
 
-⸻
+- `SensorError`  
+- `ModelError`  
+- `ApiError`  
 
-Performance & Profiling
+---
 
-Load Testing
+## Performance & Profiling
 
+### Load Testing
+
+```bash
 pip install locust
 locust -f locustfile.py
+```
 
-Profiling Tools
-	•	cProfile
-	•	py-spy
-	•	TensorBoard
+### Profiling Tools
 
-⸻
+- `cProfile`  
+- `py-spy`  
+- TensorBoard  
 
-Security Considerations
-	•	Use HTTPS + reverse proxy in production
-	•	Sanitize all inputs to /api/* routes
-	•	Restrict CORS origins
-	•	Set Flask SECRET_KEY securely
+---
 
-⸻
+## Security Considerations
 
-Troubleshooting Guide
+- Use HTTPS + reverse proxy in production  
+- Sanitize all inputs to `/api/*` routes  
+- Restrict CORS origins  
+- Set Flask `SECRET_KEY` securely  
 
-Symptom	Cause	Fix
-CAN data missing	Interface not configured	ip link set can0 up type can ...
-Model is slow	TensorFlow batch too large	Reduce sliding window size
-UI crashes	Invalid YAML or JavaScript bug	Validate base_map.yam and console logs
-PyInstaller fails	Missing static/ or templates/	Include in .spec file
+---
 
+## Troubleshooting Guide
 
-⸻
+| Symptom             | Cause                            | Fix                                  |
+|---------------------|----------------------------------|--------------------------------------|
+| CAN data missing    | Interface not configured         | `ip link set can0 up type can ...`   |
+| Model is slow       | TensorFlow batch too large       | Reduce sliding window size           |
+| UI crashes          | Invalid YAML or JavaScript bug   | Validate `base_map.yam` and console logs |
+| PyInstaller fails   | Missing `static/` or `templates/`| Include in `.spec` file              |
 
-Appendices
+---
 
-Appendix A: Full requirements.txt
+## Appendices
 
+### Appendix A: Full `requirements.txt`
+
+```
 Flask==2.2.2
 python-can==4.2.2
 cantools==36.2.0
 PyYAML==6.0
 tensorflow==2.11.0
 gunicorn==20.1.0
+```
 
-Appendix B: Sample docker-compose.yml
+### Appendix B: Sample `docker-compose.yml`
 
+```yaml
 version: '3.8'
 services:
   frontend:
@@ -284,18 +309,16 @@ services:
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     privileged: true
-
-
-⸻
-
-License
-
-This project is licensed under the MIT License — see the LICENSE file for details.
-
-⸻
-
-Author
-
-WORK IN PROGRESS BY: H. Pandit
+```
 
 ---
+
+## License
+
+This project is licensed under the MIT License — see the `LICENSE` file for details.
+
+---
+
+## Author
+
+**WORK IN PROGRESS BY: H. Pandit**
