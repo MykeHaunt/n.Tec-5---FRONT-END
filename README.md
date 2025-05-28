@@ -1,58 +1,82 @@
 ![IMG_9863](https://github.com/user-attachments/assets/87c57f40-d9ba-4cc2-a4c4-e14010aea40b)
 ![IMG_9865](https://github.com/user-attachments/assets/076afd73-ad54-4361-a130-eb2b64f005cf)
 ![IMG_9852](https://github.com/user-attachments/assets/ee295b81-a82b-4ee5-89d5-ec698ce011ef)
-
-Here is the reformatted Markdown (.md) version of the full technical README for n.Tec-5—FRONT-END. You can copy this directly into your repository’s README.md file:
+Here’s the corrected and complete README.md file with all content from the previous message properly enclosed in Markdown. This version is fully self-contained and properly formatted for GitHub rendering.
 
 ⸻
 
+✅ You can copy-paste this entire content into a file named README.md in your project root.
 
-# n.Tec-5 Front-End
+# n.Tec-5 Front-End: Technical Documentation
 
-> A real-time, AI-enhanced vehicle diagnostic and monitoring dashboard built with Flask, CAN-bus integration, TensorFlow, and modular YAML-based configuration.  
-
----
-
-## 📐 System Architecture
-
-The **n.Tec‑5 Front‑End** is a Flask-based modular UI system for monitoring sensor data from vehicles in real time, powered by CAN-bus protocols and deep learning analytics. It connects to a back-end CAN interface, collects live engine/vehicle telemetry, processes the data via an AI engine, and renders the results as dynamic visualizations.
-
-Core components:
-
-- `Flask` RESTful API
-- `python-can` for hardware interface
-- `tensorflow` for AI model inference
-- `cantools` for decoding CAN messages
-- YAML-based sensor configuration and UI mapping
+This document provides a comprehensive, end‑to‑end technical specification and usage guide for the **n.Tec‑5 Front‑End** web application. It is structured to match the documentation style of the [2JZ‑GTE Predictive Monitoring System](https://github.com/MykeHaunt/2JZ-GTE-Predictive-Monitoring-System), with detailed information about architecture, build pipelines, deployment, and internal modules.
 
 ---
 
-## 🧱 Component Breakdown
+## Table of Contents
 
-### `app.py`
+1. [System Architecture](#system-architecture)  
+2. [Component Breakdown](#component-breakdown)  
+   - [Application Entrypoint (`app.py`)](#application-entrypoint-apppy)  
+   - [Sensor Interface (`sensors.py`)](#sensor-interface-sensorspy)  
+   - [AI Model Wrapper (`ai_model.py`)](#ai-model-wrapper-ai_modelpy)  
+   - [Configuration & Mapping (`base_map.yam`)](#configuration--mapping-base_mapyam)  
+   - [Static Assets & Templates](#static-assets--templates)  
+3. [Development Environment Setup](#development-environment-setup)  
+4. [Detailed Installation](#detailed-installation)  
+5. [Build & Distribution](#build--distribution)  
+6. [Runtime Configuration](#runtime-configuration)  
+7. [Code Walkthrough](#code-walkthrough)  
+8. [Error Handling & Logging](#error-handling--logging)  
+9. [Performance & Profiling](#performance--profiling)  
+10. [Security Considerations](#security-considerations)  
+11. [Troubleshooting Guide](#troubleshooting-guide)  
+12. [Appendices](#appendices)  
+    - [Appendix A: Full `requirements.txt`](#appendix-a-full-requirementstxt)  
+    - [Appendix B: Sample `docker-compose.yml`](#appendix-b-sample-docker-composeyml)
 
-- Flask App Factory (`create_app()`)
-- Blueprint Registration:
-  - `/api` for JSON sensor data
-  - `/ui` for HTML UI routes
-- Integration of CAN thread & model inference
-- Cross-platform WSGI compatibility
+---
 
-### `sensors.py`
+## System Architecture
 
-- Class: `CanSensor`
-- Threaded CAN reading loop
-- Uses `python-can` to decode and store sensor packets
-- Implements retry mechanism with backoff
+The n.Tec‑5 Front‑End is a **Flask-based microservice** providing a responsive web interface for visualizing real-time sensor data and model outputs. Key subsystems:
 
-### `ai_model.py`
+- RESTful Flask API backend  
+- CAN bus reader thread using `python-can`  
+- AI inference pipeline (TensorFlow)  
+- Static configuration (YAML)  
+- Web UI using Bootstrap + D3.js  
 
-- Loads TensorFlow SavedModel
-- Normalizes time-series data
-- Outputs classification/prediction metrics
-- Model path configurable via YAML
+The system reads sensor values from a CAN interface, buffers the data, passes it to a deep learning model for predictions, and updates the UI in real time using asynchronous fetches and EventSource streams.
 
-### `base_map.yam`
+---
+
+## Component Breakdown
+
+### Application Entrypoint (`app.py`)
+
+- Flask app factory: `create_app()`  
+- Blueprints:
+  - `/api` — Sensor data and AI predictions
+  - `/ui` — UI template rendering  
+- WS integration for streaming updates
+
+### Sensor Interface (`sensors.py`)
+
+- Class: `CanSensor`  
+- Interfaces with `python-can`  
+- Reads and decodes CAN frames into structured data  
+- Runs as a daemon thread  
+- Uses `cantools` to parse DBC files  
+
+### AI Model Wrapper (`ai_model.py`)
+
+- Loads TensorFlow SavedModel  
+- Preprocessing: Normalization, window slicing  
+- Inference: Callable function returning anomaly scores or predictions  
+- Designed to support multiple output targets (e.g. heat, pressure)
+
+### Configuration & Mapping (`base_map.yam`)
 
 ```yaml
 - id: 0x0C
@@ -61,37 +85,32 @@ Core components:
   scale: 0.25
   offset: 0
 
-	•	Defines:
-	•	Sensor mappings
-	•	Units
-	•	Scaling factors
-	•	UI layout
-	•	Model hyperparameters
+	•	Sensor metadata and UI layout
+	•	Sampling configuration
+	•	Model normalization stats
+
+Static Assets & Templates
+	•	templates/index.html: Bootstrap + Jinja2
+	•	static/js/main.js: D3.js + EventSource
+	•	static/css/main.css: Custom layout
 
 ⸻
 
-🖼️ Static Assets & Templates
-	•	/templates/index.html: Bootstrap + Jinja2
-	•	/static/js/main.js: D3.js for charts + Fetch for JSON polling
-	•	/static/css/main.css: Responsive layout
+Development Environment Setup
 
-⸻
+Versioned Dependencies
+	•	Flask 2.2+
+	•	python-can 4.2.2+
+	•	tensorflow 2.11+
+	•	cantools, PyYAML, gunicorn
 
-🧪 Development Setup
-
-Prerequisites
-
-sudo apt install python3-pip can-utils
-pip install virtualenv
-
-Virtual Environment
+Virtual Environments
 
 python3 -m venv .venv
 source .venv/bin/activate
-pip install --upgrade pip
 pip install -r requirements.txt
 
-CAN Emulator (Linux)
+Local CAN Bus Emulation
 
 sudo modprobe vcan
 sudo ip link add dev vcan0 type vcan
@@ -100,22 +119,50 @@ sudo ip link set up vcan0
 
 ⸻
 
-📦 Build & Distribution
+Detailed Installation
 
-PyInstaller Build
+Initial Clone
+
+git clone https://github.com/MykeHaunt/n.Tec-5---FRONT-END.git
+cd n.Tec-5---FRONT-END/NTec_Web
+
+Directory Layout
+
+├── app.py
+├── sensors.py
+├── ai_model.py
+├── base_map.yam
+├── requirements.txt
+├── static/
+└── templates/
+
+Dependency Installation
+
+pip install -r requirements.txt
+
+
+⸻
+
+Build & Distribution
+
+PyInstaller
+	1.	Create app.spec with templates and static folders included in datas.
+	2.	Build with:
 
 pyinstaller --clean --onefile app.spec
 
-Produces:
-	•	Linux/macOS: dist/ntec5_frontend
-	•	Windows: dist/NTec5_FrontEnd.exe
+	3.	Output binary at: dist/NTec5_FrontEnd.exe or dist/ntec5_frontend
+
+Dockerization
 
 Dockerfile
 
 FROM python:3.10-slim
+RUN apt-get update && apt-get install -y can-utils
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN pip install -r requirements.txt
 EXPOSE 5000
 ENTRYPOINT ["python", "app.py"]
 
@@ -125,106 +172,99 @@ version: '3.8'
 services:
   frontend:
     build: .
-    ports:
-      - "5000:5000"
+    ports: ["5000:5000"]
     devices:
       - "/dev/vcan0:/dev/vcan0"
     privileged: true
 
+GitHub Actions
+
+CI pipeline runs tests, packages the binary, and pushes artifacts or Docker images to GitHub Packages.
 
 ⸻
 
-⚙️ Runtime Configuration
-
-Env Variables
-	•	CAN_CHANNEL=can0
-	•	CAN_BITRATE=500000
-	•	MODEL_PATH=./models/model
-
-Model Pathing
-
-The model must be saved as a TensorFlow SavedModel directory and defined in base_map.yam.
-
-UI Sections
-
-Each section in YAML maps to a dashboard panel.
+Runtime Configuration
+	•	CAN_CHANNEL — Defaults to can0
+	•	CAN_BITRATE — Defaults to 500000
+	•	MODEL_PATH — Path to TensorFlow model
 
 ⸻
 
-🔧 Code Flow Summary
+Code Walkthrough
 
-Request Handling
+app.py
+	•	Initializes server
+	•	Defines /api/data, /api/predict, / routes
+	•	Injects base_map into Jinja templates
 
-flowchart TD
-  A[Start App] --> B[Init Flask]
-  B --> C[Init CAN Thread]
-  B --> D[Load Config & Model]
-  D --> E[Serve UI + APIs]
+sensors.py
 
-Endpoint Routes
-	•	/ → HTML dashboard
-	•	/api/data → live sensor JSON
-	•	/api/predict → AI model results
+class CanSensor:
+    def __init__(self, config):
+        self.bus = can.interface.Bus(**config)
+        self.buffer = deque(maxlen=config['buffer_size'])
+
+	•	Background thread reads from bus
+	•	Catches errors and retries with backoff
+
+ai_model.py
+	•	Loads model only on first call
+	•	Preprocesses data (normalization, windowing)
+	•	Returns dictionary of prediction scores
 
 ⸻
 
-🧰 Logging & Error Handling
+Error Handling & Logging
 
-Custom Exceptions
+Logging
+
+import logging
+handler = logging.StreamHandler()
+handler.setFormatter(JsonFormatter())
+
+Exceptions
 	•	SensorError
 	•	ModelError
 	•	ApiError
 
-Logging Format
+⸻
 
-import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+Performance & Profiling
+
+Load Testing
+
+pip install locust
+locust -f locustfile.py
+
+Profiling Tools
+	•	cProfile
+	•	py-spy
+	•	TensorBoard
+
+⸻
+
+Security Considerations
+	•	Use HTTPS + reverse proxy in production
+	•	Sanitize all inputs to /api/* routes
+	•	Restrict CORS origins
+	•	Set Flask SECRET_KEY securely
+
+⸻
+
+Troubleshooting Guide
+
+Symptom	Cause	Fix
+CAN data missing	Interface not configured	ip link set can0 up type can ...
+Model is slow	TensorFlow batch too large	Reduce sliding window size
+UI crashes	Invalid YAML or JavaScript bug	Validate base_map.yam and console logs
+PyInstaller fails	Missing static/ or templates/	Include in .spec file
 
 
 ⸻
 
-📊 Performance Profiling
-	•	Load Testing: Use locust
-	•	Model Profiling: TensorBoard
-	•	Python Profiling: py-spy, cProfile
+Appendices
 
-⸻
-
-🛡️ Security Practices
-	•	CORS limited to known origins
-	•	Secrets/environment via .env or os.environ
-	•	Avoid unvalidated JSON inputs
-	•	Use HTTPS proxy (e.g., NGINX)
-
-⸻
-
-❓ Troubleshooting
-
-Problem	Cause	Solution
-No CAN data	Interface down	sudo ip link set can0 up
-UI empty	JS fetch errors	Check browser console
-Inference slow	GPU not enabled	Install TensorFlow GPU
-
-
-⸻
-
-📁 Directory Structure
-
-NTec_Web/
-├── app.py
-├── ai_model.py
-├── base_map.yam
-├── sensors.py
-├── requirements.txt
-├── static/
-│   └── js, css
-├── templates/
-│   └── index.html
-
-
-⸻
-
-📎 requirements.txt
+Appendix A: Full requirements.txt
 
 Flask==2.2.2
 python-can==4.2.2
@@ -233,52 +273,29 @@ PyYAML==6.0
 tensorflow==2.11.0
 gunicorn==20.1.0
 
+Appendix B: Sample docker-compose.yml
 
-⸻
-
-🧬 Appendix
-
-Sample PyInstaller Spec (app.spec)
-
-a = Analysis(['app.py'],
-             datas=[('templates/*', 'templates'), ('static/*', 'static')],
-             hiddenimports=['can', 'cantools'])
-
-
-⸻
-
-🚀 CI/CD Setup
-
-You can automate builds using GitHub Actions:
-
-- uses: actions/setup-python@v4
-  with:
-    python-version: 3.10
-- run: pip install -r requirements.txt pyinstaller
-- run: pyinstaller app.spec
-- uses: actions/upload-artifact@v3
-  with:
-    path: dist/*
+version: '3.8'
+services:
+  frontend:
+    build: .
+    ports:
+      - "5000:5000"
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    privileged: true
 
 
 ⸻
 
-🏁 Conclusion
+License
 
-This front-end application represents a modular, hardware-integrated, AI-enhanced data visualization system for automotive diagnostics. Its clean architecture, Docker-ready setup, and PyInstaller build support make it ideal for deployment on:
-	•	Local dev environments
-	•	Raspberry Pi embedded units
-	•	Production fleet analytics
-
-For back-end integration, refer to:
-n.Tec-5—BACK-END
-or the full system:
-2JZ-GTE-Predictive-Monitoring-System
+This project is licensed under the MIT License — see the LICENSE file for details.
 
 ⸻
+
+Author
 
 WORK IN PROGRESS BY: H. Pandit
 
 ---
-
-Let me know if you’d like the `.md` file itself exported or zipped. I can also generate a matching one for the BACK-END repo.
