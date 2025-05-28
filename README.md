@@ -1,3 +1,15 @@
+![IMG_0107](https://github.com/user-attachments/assets/603d1ffd-e336-4954-9551-c8e205ebece4)
+![IMG_0104](https://github.com/user-attachments/assets/89ea7387-9da5-4642-8e7f-c7e42783b92c)
+![IMG_9866](https://github.com/user-attachments/assets/d9bbf43a-bebc-4b68-bc7c-16ca3ad9946f)
+
+
+https://github.com/user-attachments/assets/2335d357-e65a-4496-8a60-58633ac015e4
+
+![IMG_9852](https://github.com/user-attachments/assets/b1187bdc-dbf3-4ec9-a730-a5dfc420ea9b)
+![IMG_9865](https://github.com/user-attachments/assets/0d96d6f0-ece9-4fa5-951c-7a3bc4b2d173)
+![IMG_9863](https://github.com/user-attachments/assets/4f75766b-b65b-489c-ab45-2102aefb8f7d)
+![IMG_0085](https://github.com/user-attachments/assets/fc5eaf54-4382-42fd-b0de-84dce1dbbaef)
+
 
 # n.Tec-5 Front-End: Technical Documentation
 
