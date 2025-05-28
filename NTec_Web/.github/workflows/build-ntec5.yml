@@ -1,0 +1,53 @@
+name: Build n.Tec5 Front‑End App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: python-version: '3.9'
+      - run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller -r requirements.txt
+      - run: pyinstaller app.spec
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ntec5-windows
+          path: dist/ntec5/ntec5.exe
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: python-version: '3.9'
+      - run: |
+          pip install --upgrade pip
+          pip install pyinstaller -r requirements.txt
+      - run: pyinstaller app.spec
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ntec5-macos
+          path: dist/ntec5/ntec5
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: python-version: '3.9'
+      - run: |
+          sudo apt-get update && sudo apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6
+          pip install --upgrade pip
+          pip install pyinstaller -r requirements.txt
+      - run: pyinstaller app.spec
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ntec5-linux
+          path: dist/ntec5/ntec5
