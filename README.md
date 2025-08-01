@@ -1,6 +1,4 @@
 # n.Tec‑5 — FRONT‑END
-
-![Build](https://github.com/MykeHaunt/n.Tec-5---FRONT-END/actions/workflows/conda-package.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)
 ![License](https://img.shields.io/github/license/MykeHaunt/n.Tec-5---FRONT-END)
 ![Status](https://img.shields.io/badge/status-Beta-blue.svg)
