@@ -1,3 +1,16 @@
+# n.Tec‑5 — FRONT‑END
+
+![Build](https://github.com/MykeHaunt/n.Tec-5---FRONT-END/actions/workflows/conda-package.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)
+![License](https://img.shields.io/github/license/MykeHaunt/n.Tec-5---FRONT-END)
+![Status](https://img.shields.io/badge/status-Beta-blue.svg)
+![Last Commit](https://img.shields.io/github/last-commit/MykeHaunt/n.Tec-5---FRONT-END)
+![Contributors](https://img.shields.io/github/contributors/MykeHaunt/n.Tec-5---FRONT-END)
+![Issues](https://img.shields.io/github/issues/MykeHaunt/n.Tec-5---FRONT-END)
+![Stars](https://img.shields.io/github/stars/MykeHaunt/n.Tec-5---FRONT-END?style=social)
+![Forks](https://img.shields.io/github/forks/MykeHaunt/n.Tec-5---FRONT-END?style=social)
+
+
 ![IMG_0107](https://github.com/user-attachments/assets/603d1ffd-e336-4954-9551-c8e205ebece4)
 ![IMG_0104](https://github.com/user-attachments/assets/89ea7387-9da5-4642-8e7f-c7e42783b92c)
 ![IMG_9866](https://github.com/user-attachments/assets/d9bbf43a-bebc-4b68-bc7c-16ca3ad9946f)
